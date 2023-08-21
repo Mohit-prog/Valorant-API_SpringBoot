@@ -1,17 +1,25 @@
 package com.Valorant.API.DataConfigure;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.Valorant.API.Constant;
 import com.Valorant.API.Data.Agent.Agent;
+import com.Valorant.API.Data.Agent.AgentAbility;
+import com.Valorant.API.Data.Agent.AgentDetails;
 import com.Valorant.API.Data.Agent.AgentMedia;
+import com.Valorant.API.Data.JPARepository.AgentAbilityRepository;
+import com.Valorant.API.Data.JPARepository.AgentDetailsRepository;
 import com.Valorant.API.Data.JPARepository.AgentMediaRepository;
 import com.Valorant.API.Data.JPARepository.AgentRepository;
 
 public class DataConfiguration {
+    // https://valorant-web-api.up.railway.app/agents
 
     static Logger logger = Logger.getLogger(DataConfiguration.class.getName());
+    private static String displayName[] = Constant.displayName;
 
     public static void configureAgentData(AgentRepository agentRepository, AgentMediaRepository agentMediaRepository) {
 
@@ -19,11 +27,10 @@ public class DataConfiguration {
         String bust[] = Constant.bustPotrait;
         int voice[] = Constant.voiceline;
 
-        String displayName[] = Constant.displayName;
         String role[] = Constant.role;
         String ultimate[] = Constant.ultimate;
 
-        for (int i = 1; i <= 22; i++) {
+        for (int i = 1; i <= Constant.AGENT_COUNT; i++) {
             AgentMedia amedia = new AgentMedia();
             amedia.setUuid(i);
             amedia.setBackgroundImage(backImg[i - 1]);
@@ -42,6 +49,50 @@ public class DataConfiguration {
         }
 
         logger.log(Level.INFO, "Agent Data filled successfully");
+    }
+
+    public static void configureAgentDetails(AgentDetailsRepository agentDetailsRepository,
+            AgentAbilityRepository agentAbilityRepository) {
+
+        // private int id;
+
+        // private String displayName;
+
+        String agentDescription[] = Constant.agentDescription;
+
+        // private List<AgentAbility> ability;
+        String abilityDisplayName[][] = Constant.abilityNames;
+
+        String abilityDisplayIcon[][] = Constant.abilityIcons;
+
+        String abilityDescription[][] = Constant.abilityDescriptions;
+
+        String abilitiyMedia[][] = Constant.abilityVideos;
+
+        for (int i = 1; i <= Constant.AGENT_COUNT; i++) {
+            AgentDetails agent = new AgentDetails();
+            agent.setId(i);
+            ;
+            agent.setDisplayName(displayName[i - 1]);
+            agent.setDescription(agentDescription[i - 1]);
+
+            List<AgentAbility> abilityList = new ArrayList<>();
+
+            for (int j = 1; j <= 4; j++) {
+                AgentAbility ability = new AgentAbility();
+                ability.setId((i * 10) + j);
+                ability.setDisplayName(abilityDisplayName[i - 1][j - 1]);
+                ability.setDisplayIcon(abilityDisplayIcon[i - 1][j - 1]);
+                ability.setDescription(abilityDescription[i - 1][j - 1]);
+                ability.setAbilitiyMedia(abilitiyMedia[i - 1][j - 1]);
+                agentAbilityRepository.save(ability);
+                abilityList.add(ability);
+            }
+            agent.setAbility(abilityList);
+            agentDetailsRepository.save(agent);
+
+        }
+
     }
 
 }
