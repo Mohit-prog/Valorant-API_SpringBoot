@@ -2,8 +2,6 @@ package com.Valorant.API.DataConfigure;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.Valorant.API.Constant;
 import com.Valorant.API.Data.Agent.Agent;
@@ -18,7 +16,6 @@ import com.Valorant.API.Data.JPARepository.AgentRepository;
 public class DataConfiguration {
     // https://valorant-web-api.up.railway.app/agents
 
-    static Logger logger = Logger.getLogger(DataConfiguration.class.getName());
     private static String displayName[] = Constant.displayName;
 
     public static void configureAgentData(AgentRepository agentRepository, AgentMediaRepository agentMediaRepository) {
@@ -48,7 +45,6 @@ public class DataConfiguration {
             agentRepository.save(a);
         }
 
-        logger.log(Level.INFO, "Agent Data filled successfully");
     }
 
     public static void configureAgentDetails(AgentDetailsRepository agentDetailsRepository,
