@@ -12,6 +12,8 @@ import com.Valorant.API.Data.JPARepository.AgentAbilityRepository;
 import com.Valorant.API.Data.JPARepository.AgentDetailsRepository;
 import com.Valorant.API.Data.JPARepository.AgentMediaRepository;
 import com.Valorant.API.Data.JPARepository.AgentRepository;
+import com.Valorant.API.Data.JPARepository.MapRepository;
+import com.Valorant.API.Data.Map.Map;
 
 public class DataConfiguration {
     // https://valorant-web-api.up.railway.app/agents
@@ -91,4 +93,31 @@ public class DataConfiguration {
 
     }
 
+    public static void configureMaps(MapRepository mapRepository) {
+
+        String mapNames[] = Constant.mapDisplayNames;
+        String mapDescription[] = Constant.mapDescription;
+        String mapFeaturedImage[] = Constant.mapFeaturedImage;
+        String miniMapImages[] = Constant.miniMapImages;
+        String galleryImages[][] = Constant.mapGalleryImages;
+
+        for (int i = 1; i <= Constant.MAP_COUNT; i++) {
+
+            Map map = new Map();
+            map.setId(i);
+            map.setDisplayName(mapNames[i - 1]);
+            map.setDescription(mapDescription[i - 1]);
+            map.setFeaturedImage(mapFeaturedImage[i - 1]);
+            ArrayList<String> gImages = new ArrayList<>();
+
+            for (String img : galleryImages[i - 1]) {
+                gImages.add(img);
+
+            }
+            map.setGalleryImages(gImages);
+            map.setMiniMapImage(miniMapImages[i - 1]);
+            mapRepository.save(map);
+        }
+
+    }
 }
